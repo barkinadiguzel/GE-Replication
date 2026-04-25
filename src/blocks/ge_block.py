@@ -7,15 +7,22 @@ from .excite import ChannelExcite
 def build_gather(gather_type, channels):
     if gather_type == "avg":
         return GlobalAvgGather()
-    elif gather_type == "conv":
-        return LargeKernelGather(channels)
+
+    elif gather_type == "conv7":
+        return LargeKernelGather(channels, kernel_size=7)
+
+    elif gather_type == "conv11":
+        return LargeKernelGather(channels, kernel_size=11)
+
     elif gather_type == "identity":
         return IdentityGather()
+
     else:
         raise ValueError(f"Unknown gather type: {gather_type}")
 
 
 class GEBlock(nn.Module):
+
     def __init__(self, channels, gather_type="avg", reduction=4):
         super().__init__()
 
